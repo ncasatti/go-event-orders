@@ -1,0 +1,9 @@
+.bin/
+node_modules/
+package-lock.json
+.serverless/
+.serverless/bin/
+*__pycache__*
+functions/*/output.yaml
+functions/*/logs.log
+functions/*/function.log
