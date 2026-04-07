@@ -21,8 +21,8 @@ PROJECT_VERSION = "1.0.0"
 # AWS Configuration
 # ============================================================================
 ENV = "dev"
-AWS_PROFILE = "xsi"
-SERVICE_NAME = "event-test"
+AWS_PROFILE = ""
+SERVICE_NAME = "go-event-orders"
 
 
 # ============================================================================

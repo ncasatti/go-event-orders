@@ -17,7 +17,7 @@ provider:
     ORDERS_BUCKET_NAME: ${self:custom.ordersBucket}
 
 custom:
-  ordersBucket: xsi-event-orders-${self:provider.stage}
+  ordersBucket: event-orders-${self:provider.stage}
 
 package:
   individually: true
