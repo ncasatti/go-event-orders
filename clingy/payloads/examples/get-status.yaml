@@ -1,0 +1,7 @@
+routeKey: "GET /status"
+rawPath: "/status"
+requestContext:
+  http:
+    method: "GET"
+    path: "/status"
+  routeKey: "GET /status"

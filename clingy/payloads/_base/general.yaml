@@ -1,0 +1,30 @@
+# Base payload structure for AWS Lambda HTTP API Gateway v2
+# This file is merged into ALL payloads automatically
+
+version: "2.0"
+routeKey: "GET /status"
+rawPath: "/status"
+
+headers:
+  Content-Type: "application/json"
+  Accept: "application/json"
+
+queryStringParameters: {}
+
+requestContext:
+  accountId: "580395407526"
+  apiId: "test-api-local"
+  http:
+    method: "GET"
+    path: "/status"
+    protocol: "HTTP/1.1"
+    sourceIp: "127.0.0.1"
+    userAgent: "serverless-invoke-local"
+  requestId: "local-test-request-id"
+  routeKey: "GET /status"
+  stage: "dev"
+  time: "01/Jan/2025:00:00:00 +0000"
+  timeEpoch: 1704067200000
+
+body: ""
+isBase64Encoded: false

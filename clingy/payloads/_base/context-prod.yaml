@@ -1,0 +1,10 @@
+# Production stage overrides
+# Merged when PAYLOAD_DEFAULT_STAGE = "prod"
+
+requestContext:
+  stage: "prod"
+  accountId: "499799893363"
+  http:
+    path: "/prod/test"
+
+rawPath: "/prod/test"

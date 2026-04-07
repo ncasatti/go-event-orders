@@ -1,0 +1,22 @@
+routeKey: "POST /orders"
+rawPath: "/orders"
+requestContext:
+  http:
+    method: "POST"
+    path: "/orders"
+  routeKey: "POST /orders"
+body:
+  DeviceID: "device-mock-123"
+  Orders:
+    - client_id: 1
+      order_date: "2026-04-07T10:00:00Z"
+      total_amount: 150.50
+      items:
+        - product_id: 1
+          quantity: 2
+          unit_price: 50.00
+          subtotal: 100.00
+        - product_id: 2
+          quantity: 1
+          unit_price: 50.50
+          subtotal: 50.50

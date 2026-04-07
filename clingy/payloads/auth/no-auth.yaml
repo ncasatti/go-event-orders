@@ -1,0 +1,6 @@
+# Payload without authentication (public endpoint)
+# Use this to remove the authorizer from requestContext
+
+# Note: Setting to null removes the field in merge
+requestContext:
+  authorizer: null

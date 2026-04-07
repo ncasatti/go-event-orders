@@ -1,0 +1,7 @@
+routeKey: "GET /products"
+rawPath: "/products"
+requestContext:
+  http:
+    method: "GET"
+    path: "/products"
+  routeKey: "GET /products"

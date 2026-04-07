@@ -1,0 +1,7 @@
+routeKey: "GET /clients"
+rawPath: "/clients"
+requestContext:
+  http:
+    method: "GET"
+    path: "/clients"
+  routeKey: "GET /clients"

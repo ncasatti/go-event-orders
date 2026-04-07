@@ -1,0 +1,10 @@
+# Development stage overrides
+# Merged when PAYLOAD_DEFAULT_STAGE = "dev"
+
+requestContext:
+  stage: "dev"
+  accountId: "580395407526"
+  http:
+    path: "/dev/test"
+
+rawPath: "/dev/test"
