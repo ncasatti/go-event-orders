@@ -1,0 +1,83 @@
+org: ncasatti
+service: go-event-orders
+
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: provided.al2023
+  stage: ${opt:stage, 'dev'}
+  region: us-west-2
+  environment:
+    DB_HOST: ${env:DB_HOST}
+    DB_PORT: ${env:DB_PORT}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    DB_NAME: ${env:DB_NAME}
+    ORDERS_BUCKET_NAME: ${self:custom.ordersBucket}
+
+custom:
+  ordersBucket: xsi-event-orders-${self:provider.stage}
+
+package:
+  individually: true
+
+functions:
+  status:
+    handler: bootstrap
+    package:
+      artifact: .bin/status/status.zip
+    events:
+      - httpApi:
+          path: /status
+          method: get
+
+  getProducts:
+    handler: bootstrap
+    package:
+      artifact: .bin/getProducts/getProducts.zip
+    events:
+      - httpApi:
+          path: /products
+          method: get
+
+  getClients:
+    handler: bootstrap
+    package:
+      artifact: .bin/getClients/getClients.zip
+    events:
+      - httpApi:
+          path: /clients
+          method: get
+
+  postOrders:
+    handler: bootstrap
+    package:
+      artifact: .bin/postOrders/postOrders.zip
+    events:
+      - httpApi:
+          path: /orders
+          method: post
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:PutObject
+        Resource: arn:aws:s3:::${self:custom.ordersBucket}/*
+
+  processOrders:
+    handler: bootstrap
+    package:
+      artifact: .bin/processOrders/processOrders.zip
+    timeout: 60
+    events:
+      - s3:
+          bucket: ${self:custom.ordersBucket}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: orders/
+            - suffix: .json
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:custom.ordersBucket}/*
