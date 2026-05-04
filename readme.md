@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > **Note:** This is a reduced version of a real system I designed and built, which I cannot publicly share because it belongs to my company. This repository serves as a demonstration of architecture and best practices.
 
----
+______________________________________________________________________
 
 ## Overview
 
@@ -16,11 +16,11 @@ The system manages asynchronous order ingestion from mobile devices, ensuring hi
 This project uses **separation of concerns** rather than a monolithic request-response cycle, the system splits the problem into two distinct phases:
 
 1. **Fast Ingest** — Accept and queue orders instantly (sub-100ms response).
-2. **Async Processing** — Validate business logic and persist data without blocking the client.
+1. **Async Processing** — Validate business logic and persist data without blocking the client.
 
 This pattern is battle-tested in high-scale systems and eliminates the need for traditional message queues while maintaining full event traceability and idempotent processing.
 
----
+______________________________________________________________________
 
 ## Technology Stack
 
@@ -33,7 +33,7 @@ This pattern is battle-tested in high-scale systems and eliminates the need for 
 | **ORM** | GORM |
 | **Architecture Pattern** | Event-Driven + Clean Architecture |
 
----
+______________________________________________________________________
 
 ## System Architecture
 
@@ -66,11 +66,11 @@ sequenceDiagram
 
 1. **Ingest Phase** — The `POST /orders` endpoint validates the payload structurally and uploads it to S3 immediately, returning a `202 Accepted` response. The client is freed from waiting for backend processing.
 
-2. **Event Trigger** — The S3 upload automatically triggers an event that invokes the `processOrders` Lambda function.
+1. **Event Trigger** — The S3 upload automatically triggers an event that invokes the `processOrders` Lambda function.
 
-3. **Business Logic Phase** — The processor downloads the payload, executes domain validations (customer existence, product stock), and persists data transactionally to PostgreSQL.
+1. **Business Logic Phase** — The processor downloads the payload, executes domain validations (customer existence, product stock), and persists data transactionally to PostgreSQL.
 
----
+______________________________________________________________________
 
 ## Project Structure
 
@@ -79,18 +79,18 @@ The codebase follows a modular, layered architecture that enforces separation of
 ```
 .
 ├── functions/
-│   ├── apitypes/          # Domain Models (Clean Types)
-│   │   ├── client.go
-│   │   ├── order.go
-│   │   ├── payload.go
-│   │   └── product.go
-│   ├── getArticulos/      # GET Endpoint (Direct Consumer)
 │   ├── getClients/        # GET Endpoint (Direct Consumer)
+│   ├── getProducts/       # GET Endpoint (Direct Consumer)
 │   ├── postOrders/        # POST Endpoint (Event Producer)
 │   ├── processOrders/     # Event Processor (Async Consumer)
-│   │   ├── main.go
-│   │   └── validators/    # Pure Business Logic
-│   └── utils/             # Cross-cutting Utilities (DB, Logging, Responses)
+│   └── status/            # Health Check Endpoint
+├── internal/
+│   ├── domain/            # Domain Models (Clean Types)
+│   ├── dto/               # Data Transfer Objects (Request/Response)
+│   ├── infrastructure/    # Infrastructure Adapters (DB, Observability, Storage)
+│   ├── repository/        # Data Access Layer
+│   └── shared/            # Cross-cutting Utilities
+├── migrator/              # Database Schema Migrator
 ├── clingy/                # Interactive CLI for Lambda Testing & Deployment
 ├── serverless.yml         # AWS Infrastructure Definition
 ├── go.mod                 # Dependencies
@@ -99,37 +99,58 @@ The codebase follows a modular, layered architecture that enforces separation of
 
 ### Key Components
 
-#### **`apitypes/`** — Domain Models
-Pure Go structs with zero external dependencies. These types are the single source of truth for data contracts across the entire system. No database logic, no AWS SDK calls—just clean, serializable domain objects.
+#### **`internal/domain/`** — Domain Models
+
+Pure Go structs with zero external dependencies (annotated for GORM). These types are the single source of truth for data contracts across the entire system. No database logic, no AWS SDK calls—just clean, serializable domain objects.
 
 **Why it matters:** Enables easy testing, clear contracts, and reusability across functions.
 
-#### **`validators/`** — Business Logic
-Encapsulates all domain rules (customer validation, stock checks, order constraints). These are pure functions that take domain objects and return validation results.
+#### **`internal/dto/`** — Data Transfer Objects
 
-**Why it matters:** Business logic is testable in isolation without spinning up databases or AWS services. Rules are centralized and versioned with the code.
+Defines the exact structure of incoming requests and outgoing responses, ensuring that the domain models are never directly exposed or tightly coupled to the HTTP layer.
+
+#### **`internal/infrastructure/`** — Infrastructure Adapters
+
+Encapsulates all external integrations, such as the S3 client for publishing events, the PostgreSQL connection setup, and observability tools.
+
+**Why it matters:** Isolates the core domain from external dependencies, making it easier to swap out technologies or mock them during testing.
+
+#### **`internal/repository/`** — Data Access Layer
+
+Abstracts the database operations (e.g., `orders_repo.go`, `validation_repo.go`). It provides a clean interface for the business logic to interact with persistence without knowing about GORM or SQL.
+
+#### **`migrator/`** — Database Schema Migrator
+
+A dedicated tool that uses GORM's AutoMigrate feature to synchronize the database schema directly from the domain models in `internal/domain/`. 
+
+**Why it matters:** Eliminates the need for raw SQL migration files, ensuring the database structure is always perfectly aligned with the Go structs. For more details, see the [Migrator documentation](./migrator/readme.md).
 
 #### **`postOrders/`** — Lightweight Producer
+
 A thin HTTP handler that accepts the order payload, validates its structure, and uploads it to S3. Its single responsibility is to be fast and reliable.
 
 **Why it matters:** Keeps the critical path short. Mobile clients get instant feedback. No database locks, no complex transactions.
 
 #### **`processOrders/`** — Heavy Lifting Consumer
+
 The workhorse function that handles all business complexity: validation, database transactions, error recovery, and idempotent retries.
 
 **Why it matters:** Separates concerns. Complex logic runs asynchronously, isolated from the client request. Failures don't cascade to the mobile app.
 
-#### **`utils/`** — Cross-cutting Concerns
-Shared utilities for database connections, structured logging, HTTP response formatting (JSend pattern), and AWS SDK interactions.
+#### **`internal/shared/`** — Cross-cutting Concerns
 
-**Why it matters:** Eliminates duplication. Ensures consistent error handling and logging across all functions.
+Shared utilities for HTTP response formatting (JSend pattern) and other common helpers.
 
----
+**Why it matters:** Eliminates duplication and ensures consistent error handling across all functions.
+
+______________________________________________________________________
 
 ## Design Patterns & Best Practices
 
 ### 1. **Clean Architecture**
+
 The codebase strictly separates:
+
 - **Entities** (`apitypes/`) — Domain objects, independent of frameworks.
 - **Use Cases** (`postOrders/`, `processOrders/`) — Business logic orchestration.
 - **Adapters** (`utils/`) — Database, HTTP, AWS integrations.
@@ -137,19 +158,24 @@ The codebase strictly separates:
 This layering makes the system testable, maintainable, and framework-agnostic.
 
 ### 2. **Event-Driven Design**
+
 By using S3 as an event bus, the system achieves:
+
 - **Decoupling** — Producers and consumers are completely independent.
 - **Scalability** — Each component scales independently based on demand.
 - **Resilience** — Failures in processing don't affect order ingestion.
 - **Auditability** — Every event is persisted in S3 for compliance and debugging.
 
 ### 3. **Idempotent Processing**
+
 The `processOrders` function is designed to be safely retried. If a Lambda invocation fails midway, re-running it produces the same result without duplicating data or side effects.
 
 **Implementation:** Database constraints (unique keys) and transaction semantics ensure idempotency at the persistence layer.
 
 ### 4. **Structured Error Handling**
+
 All functions return standardized HTTP responses using the **JSend pattern**:
+
 ```json
 {
   "status": "success|fail|error",
@@ -161,11 +187,12 @@ All functions return standardized HTTP responses using the **JSend pattern**:
 This ensures clients can reliably parse and handle errors.
 
 ### 5. **Security by Design**
+
 - **Environment Variables** — All credentials (DB passwords, API keys) are injected at runtime, never hardcoded.
 - **IAM Least Privilege** — Each Lambda function has minimal permissions (S3 read/write, RDS access only).
 - **Input Validation** — All payloads are validated before processing.
 
----
+______________________________________________________________________
 
 ## Clingy: Interactive Lambda Testing & Deployment
 
@@ -182,86 +209,27 @@ This ensures clients can reliably parse and handle errors.
 ### Why It Matters
 
 Traditional Lambda development involves:
+
 1. Write code → 2. Compile → 3. Zip → 4. Deploy → 5. Invoke via AWS Console → 6. Check logs in CloudWatch
 
 Clingy collapses this into a single interactive flow, reducing iteration time from minutes to seconds. The composable payload system means you can test complex scenarios (auth headers, nested bodies, query parameters) without manually editing JSON files.
 
 For more details, see the [Clingy documentation](./clingy/README.md).
 
----
-
-## Getting Started
-
-### Prerequisites
-
-- Go 1.23+
-- Node.js & Serverless Framework (`npm install -g serverless`)
-- AWS account with appropriate IAM permissions
-- Python 3.8+ (for Clingy)
-
-### Quick Setup
-
-1. **Clone the repository:**
-   ```bash
-   git clone [GITHUB_PROJECT_URL]
-   cd go-event-orders
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   go mod download
-   npm install
-   ```
-
-3. **Configure AWS credentials:**
-   ```bash
-   aws configure --profile your-profile
-   ```
-
-4. **Deploy to AWS:**
-   ```bash
-   serverless deploy --aws-profile your-profile
-   ```
-
-5. **Test with Clingy:**
-   ```bash
-   cd clingy
-   python3 -m clingy
-   ```
-
----
-
-## Demo & Visualization
+### Demo & Visualization
 
 > ![Deploy functions](docs/assets/deploy.gif)
-> 
-> Shows the buil, zip and deploy workflow with clingy.
+>
+> Shows the build, zip and deploy workflow with clingy.
 
 > ![Invoke function](docs/assets/invoke.gif)
-> 
+>
 > Shows the invoke workflow.
 
 > ![Post Orders](docs/assets/post-orders.gif)
-> 
+>
 > Shows the post orders workflow.
 
----
-
-## Key Takeaways
-
-This project demonstrates:
-
-✅ **Scalable Architecture** — Handles high-volume order ingestion without bottlenecks.
-
-✅ **Resilient Design** — Failures in processing don't affect order acceptance. Retries are safe and automatic.
-
-✅ **Clean Code** — Business logic is separated from infrastructure. Easy to test, easy to modify.
-
-✅ **Developer Experience** — Clingy makes local development and testing as fast as production deployment.
-
-✅ **Production-Ready** — Structured logging, error handling, security, and monitoring built in from day one.
-
----
 
 ## Author
 

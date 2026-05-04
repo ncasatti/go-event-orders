@@ -1,12 +1,20 @@
 # Database Schema Migrator
 
+> **Note:** This tool is part of the Go Event Orders microservice architecture.
+
+______________________________________________________________________
+
 ## Overview
+
 This tool is responsible for managing the database schema for the **Go Event Orders** microservice. It connects to the PostgreSQL database and automatically creates or updates tables based on the domain models defined in the application.
 
 ## Architecture
-Unlike traditional migration tools that use raw SQL files, this migrator uses **GORM's AutoMigrate** feature. It directly imports the domain models from `internal/domain/orders/` (e.g., `Client`, `Product`, `Order`, `OrderItem`) and ensures the database schema is always perfectly synchronized with the Go structs.
+
+Unlike traditional migration tools that use raw SQL files, this migrator uses **GORM's AutoMigrate** feature. It directly imports the domain models from `internal/domain/` (e.g., `Client`, `Product`, `Order`, `OrderItem`) and ensures the database schema is always perfectly synchronized with the Go structs.
 
 This approach guarantees a single source of truth for the data structure across the entire system.
+
+______________________________________________________________________
 
 ## Usage
 
