@@ -196,7 +196,7 @@ ______________________________________________________________________
 
 ## Clingy: Interactive Lambda Testing & Deployment
 
-**Clingy** is a context-aware CLI framework purpose-built for testing and invoking AWS Lambda functions locally and remotely. It eliminates the friction of manual payload composition and deployment cycles.
+**Clingy** is a context-aware CLI framework that I built for testing and invoking AWS Lambda functions locally and remotely. It eliminates the friction of manual payload composition and deployment cycles.
 
 ### What Clingy Does
 
