@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GO EVENT ORDERS | ARCHITECTURE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    body {
+        font-family: 'Space Grotesk', sans-serif;
+        background-color: #050505;
+        color: #e5e2e1;
+        margin: 0;
+        overflow-x: hidden;
+    }
+    /* CRT Overlay (architecture-only) */
+    .crt-overlay {
+        position: fixed; top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%),
+                    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+        z-index: 100;
+    }
+    .vignette {
+        position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%;
+        box-shadow: inset 0 0 150px rgba(0,0,0,0.8);
+        pointer-events: none;
+        z-index: 101;
+    }
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #050505; }
+    ::-webkit-scrollbar-thumb { background: #4B5563; }
+    .cursor-block {
+        display: inline-block;
+        width: 8px;
+        height: 1em;
+        background-color: #00FFFF;
+        animation: blink 1s step-end infinite;
+        vertical-align: middle;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+</style>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "surface-container-highest": "#353534",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-container-low": "#1c1b1b",
+                    "primary-container": "#00fbfb",
+                    "on-background": "#e5e2e1",
+                    "on-surface-variant": "#b9cac9"
+                },
+                fontFamily: {
+                    headline: ["Space Grotesk"],
+                    display: ["Space Grotesk"],
+                    body: ["Space Grotesk"],
+                    label: ["Space Grotesk"]
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="dark bg-[#050505]">
+
+<div class="crt-overlay"></div>
+<div class="vignette"></div>
+
+<!-- SideNavBar -->
+<aside class="fixed left-0 h-screen w-64 bg-[#050505] flex flex-col border-r border-[#4B5563]/15 overflow-y-auto z-40">
+    <div class="p-8">
+        <div class="text-[#e5e2e1] font-bold tracking-widest text-lg mb-1">DOCUMENTATION</div>
+        <div class="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[0.6rem] text-[#4B5563]">INTERNAL_REFERENCE</div>
+    </div>
+    <nav class="flex-1 px-4 space-y-1">
+        <a href="../index.html" class="block px-4 py-2 text-[#4B5563] hover:text-[#00FFFF] text-[0.875rem] uppercase tracking-[0.1em]">README</a>
+        <a href="architecture.html" class="block px-4 py-2 text-[#00FFFF] text-[0.875rem] uppercase tracking-[0.1em] bg-[#0A0A0A]">ARCHITECTURE</a>
+    </nav>
+</aside>
+
+<!-- Main Content Wrapper -->
+<main class="ml-64 min-h-screen flex flex-col">
+
+    <!-- TopNavBar -->
+    <header class="flex justify-between items-center w-full px-8 h-16 z-30 bg-[#0A0A0A] border-b border-[#4B5563]/10 sticky top-0">
+        <div class="text-[0.75rem] font-medium text-[#4B5563] tracking-widest font-['Space_Grotesk'] uppercase">System Architecture Specification</div>
+        <div class="flex items-center space-x-6">
+            <nav class="hidden md:flex space-x-6">
+                <a class="text-[#4B5563] font-['Space_Grotesk'] uppercase tracking-[0.1em] text-[0.75rem] hover:text-[#e5e2e1] transition-none" href="../index.html">DOCS</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Content Canvas -->
+    <div class="p-12 max-w-5xl">
+        <!-- Hero Header (Architecture: cyan period accent) -->
+        <div class="mb-16">
+            <h1 class="text-[3.5rem] font-bold uppercase tracking-tight text-[#e5e2e1] leading-none mb-4">
+                GO EVENT ORDERS<span class="text-[#00FFFF]">.</span>
+            </h1>
+            <div class="flex items-center space-x-4 text-[#4B5563]">
+                <span class="font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[0.6rem]">SYSTEM SPECIFICATION</span>
+            </div>
+        </div>
+
+        <!-- Markdown Content Slot -->
+        <article class="prose prose-invert max-w-none mb-16">
+            <p class="text-[0.875rem] text-[#b9cac9] leading-relaxed">
+                The system implements a <strong>Producer-Consumer</strong> pattern with S3 as the event bus. This design decouples the mobile client from backend processing, enabling independent scaling and fault isolation.
+            </p>
+        </article>
+
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-12 gap-8">
+
+            <!-- System Overview Card -->
+            <section class="col-span-12 lg:col-span-12 bg-[#0A0A0A] p-8 border border-[#4B5563]/20">
+                <h2 class="text-[0.75rem] uppercase tracking-[0.2em] text-[#00FFFF] mb-6 font-bold">01. Core Architecture Design</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4 text-[0.875rem] text-[#b9cac9] leading-relaxed">
+                        <p><strong>Fast Ingest:</strong> The <code>POST /orders</code> endpoint validates the payload structurally and uploads it to S3 immediately, returning a <code>202 Accepted</code> response. The client is freed from waiting for backend processing.</p>
+                    </div>
+                    <div class="space-y-4 text-[0.875rem] text-[#b9cac9] leading-relaxed">
+                        <p><strong>Async Processing:</strong> The S3 upload automatically triggers an event that invokes the <code>processOrders</code> Lambda function. The processor downloads the payload, executes domain validations, and persists data transactionally to PostgreSQL.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Directory Structure -->
+            <section class="col-span-12 lg:col-span-6 bg-[#0A0A0A] p-8 border border-[#4B5563]/20">
+                <h2 class="text-[0.75rem] uppercase tracking-[0.2em] text-[#00FFFF] mb-6 font-bold">02. Directory Mapping</h2>
+                <div class="font-mono text-[0.75rem] text-[#00FFFF]/80 bg-[#050505] p-6 border-l border-[#00FFFF]/30">
+                    <div class="mb-2">ROOT/</div>
+                    <div class="ml-4">&#9500;&#9472;&#9472; <span class="text-[#e5e2e1]">internal/</span> [CORE]</div>
+                    <div class="ml-8">&#9500;&#9472;&#9472; domain/</div>
+                    <div class="ml-8">&#9500;&#9472;&#9472; dto/</div>
+                    <div class="ml-8">&#9500;&#9472;&#9472; infrastructure/</div>
+                    <div class="ml-8">&#9500;&#9472;&#9472; repository/</div>
+                    <div class="ml-8">&#9492;&#9472;&#9472; shared/</div>
+                    <div class="ml-4">&#9500;&#9472;&#9472; <span class="text-[#e5e2e1]">functions/</span> [LAMBDAS]</div>
+                    <div class="ml-8">&#9500;&#9472;&#9472; postOrders/</div>
+                    <div class="ml-8">&#9492;&#9472;&#9472; processOrders/</div>
+                    <div class="ml-4">&#9500;&#9472;&#9472; <span class="text-[#e5e2e1]">migrator/</span> [DB SYNC]</div>
+                </div>
+            </section>
+
+            <!-- Data Flow Diagram -->
+            <section class="col-span-12 lg:col-span-6 bg-[#0A0A0A] p-8 border border-[#4B5563]/20">
+                <h2 class="text-[0.75rem] uppercase tracking-[0.2em] text-[#00FFFF] mb-6 font-bold">03. Data Flow</h2>
+                <div class="flex flex-col space-y-6">
+                    <div class="flex items-center space-x-4 border border-[#4B5563]/30 p-4 bg-[#050505]">
+                        <span class="material-symbols-outlined text-[#00FFFF]">smartphone</span>
+                        <div>
+                            <div class="font-['Space_Grotesk'] uppercase tracking-[0.1em] text-[0.6875rem] text-[#e5e2e1]">Mobile App</div>
+                            <div class="text-[0.6rem] text-[#4B5563]">POST /orders</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center py-2">
+                        <span class="material-symbols-outlined text-[#4B5563]">south</span>
+                    </div>
+                    <div class="flex items-center space-x-4 border border-[#4B5563]/30 p-4 bg-[#050505]">
+                        <span class="material-symbols-outlined text-[#00FFFF]">cloud_upload</span>
+                        <div>
+                            <div class="font-['Space_Grotesk'] uppercase tracking-[0.1em] text-[0.6875rem] text-[#e5e2e1]">Amazon S3 Bucket</div>
+                            <div class="text-[0.6rem] text-[#4B5563]">EVENT_BUS</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center py-2">
+                        <span class="material-symbols-outlined text-[#4B5563]">south</span>
+                    </div>
+                    <div class="flex items-center space-x-4 border border-[#4B5563]/30 p-4 bg-[#050505]">
+                        <span class="material-symbols-outlined text-[#00FFFF]">memory</span>
+                        <div>
+                            <div class="font-['Space_Grotesk'] uppercase tracking-[0.1em] text-[0.6875rem] text-[#e5e2e1]">processOrders Lambda</div>
+                            <div class="text-[0.6rem] text-[#4B5563]">BUSINESS_LOGIC &amp; DB_INSERT</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Models Section -->
+            <section class="col-span-12 bg-[#0A0A0A] flex flex-col md:flex-row overflow-hidden border border-[#4B5563]/20">
+                <div class="md:w-1/2 p-8">
+                    <h2 class="text-[0.75rem] uppercase tracking-[0.2em] text-[#00FFFF] mb-6 font-bold">04. Design Patterns</h2>
+                    <ul class="space-y-3">
+                        <li class="p-4 bg-[#131313] border-l-2 border-[#00FFFF]">
+                            <div class="text-[0.875rem] text-[#e5e2e1] font-medium">Clean Architecture</div>
+                            <div class="text-[0.6875rem] text-[#4B5563] uppercase tracking-wider mt-1">Separation of Concerns</div>
+                        </li>
+                        <li class="p-4 hover:bg-[#1C1B1B] transition-colors border-l-2 border-transparent">
+                            <div class="text-[0.875rem] text-[#e5e2e1] font-medium">Idempotent Processing</div>
+                            <div class="text-[0.6875rem] text-[#4B5563] uppercase tracking-wider mt-1">Safe Retries</div>
+                        </li>
+                        <li class="p-4 hover:bg-[#1C1B1B] transition-colors border-l-2 border-transparent">
+                            <div class="text-[0.875rem] text-[#e5e2e1] font-medium">Structured Error Handling</div>
+                            <div class="text-[0.6875rem] text-[#4B5563] uppercase tracking-wider mt-1">JSend Pattern</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex-1 relative min-h-[300px] border-l border-[#4B5563]/20 bg-gradient-to-br from-[#0A0A0A] via-[#1c1b1b] to-[#050505] flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-[#00FFFF] font-['Space_Grotesk'] uppercase tracking-[0.5em] text-[0.6875rem] mb-2">VISUAL ASSET</div>
+                        <div class="text-[#4B5563] text-[0.6875rem] uppercase tracking-widest">// SYSTEM DIAGRAM SLOT //</div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Clean Footer -->
+        <footer class="mt-24 pt-8 border-t border-[#4B5563]/10 pb-12">
+            <div class="flex justify-between items-center text-[#4B5563] text-[0.6rem] uppercase tracking-[0.2em]">
+                <div>&copy; 2026 System Specification // Internal Use Only</div>
+                <div class="flex space-x-6">
+                    <a class="hover:text-[#00FFFF] transition-none" href="../index.html">Index</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</main>
+
+</body>
+</html>

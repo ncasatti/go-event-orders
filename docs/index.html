@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GO EVENT ORDERS | DOCUMENTATION</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "surface-container-highest": "#353534",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-container": "#201f1f",
+                    "surface-container-low": "#1c1b1b",
+                    "surface-container-lowest": "#0e0e0e",
+                    "primary-container": "#00fbfb",
+                    "on-primary-container": "#007070",
+                    "on-background": "#e5e2e1",
+                    "on-surface": "#e5e2e1",
+                    "on-surface-variant": "#b9cac9",
+                    "outline-variant": "#3a4a49"
+                },
+                fontFamily: {
+                    headline: ["Space Grotesk"],
+                    display: ["Space Grotesk"],
+                    body: ["Space Grotesk"],
+                    label: ["Space Grotesk"]
+                }
+            }
+        }
+    }
+</script>
+<style>
+    body {
+        background-color: #050505;
+        color: #e5e2e1;
+        font-family: 'Space Grotesk', sans-serif;
+        overflow-x: hidden;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #050505; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4B5563; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #00FFFF; }
+</style>
+</head>
+<body class="antialiased selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-8 h-16 z-50 bg-[#0A0A0A] fixed top-0 left-0 border-b border-[#4B5563]/15">
+    <div class="text-[1.25rem] font-bold text-[#00FFFF] tracking-widest font-['Space_Grotesk'] uppercase">DOCUMENTATION</div>
+</header>
+
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#050505] flex flex-col border-r border-[#4B5563]/15 overflow-y-auto custom-scrollbar z-40 hidden md:flex">
+    <nav class="flex-1 mt-4">
+        <div class="px-6 py-2 text-[#4B5563] font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[0.6875rem]">SECTOR / 01</div>
+        <a href="index.html" class="block px-6 py-2 text-[#00FFFF] text-[0.875rem] uppercase tracking-[0.1em] bg-[#0A0A0A]">README</a>
+        <div class="px-6 py-2 mt-6 text-[#4B5563] font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[0.6875rem]">SECTOR / 02</div>
+        <a href="pages/architecture.html" class="block px-6 py-2 text-[#4B5563] hover:text-[#00FFFF] hover:bg-[#0A0A0A] text-[0.875rem] uppercase tracking-[0.1em]">ARCHITECTURE</a>
+    </nav>
+</aside>
+
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-12 px-6 md:ml-64 md:px-12 max-w-7xl">
+    <!-- Hero Header -->
+    <section class="mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+            <div class="lg:col-span-8">
+                <h1 class="text-[3.5rem] font-extrabold uppercase tracking-[-0.05em] text-[#00FFFF] leading-none mb-6">GO EVENT ORDERS</h1>
+            </div>
+        </div>
+    </section>
+
+    <!-- Markdown Content Slot -->
+    <article class="prose prose-invert max-w-none mb-20">
+        <p class="text-[0.875rem] text-[#b9cac9] leading-relaxed mb-6">
+            <strong>Go Event Orders</strong> is a production-grade, event-driven microservice built in <strong>Go</strong> that demonstrates modern backend architecture principles. It showcases how to design scalable, resilient, and maintainable systems using <strong>Clean Architecture</strong>, <strong>Event-Driven Design</strong>, and <strong>AWS Serverless</strong> technologies.
+        </p>
+        <p class="text-[0.875rem] text-[#b9cac9] leading-relaxed mb-6">
+            The system manages asynchronous order ingestion from mobile devices, ensuring high throughput, fault tolerance, and complete decoupling between producers and consumers through an elegant S3-based event bus pattern.
+        </p>
+    </article>
+
+    <!-- Content Grid (Bento) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Visual Asset Section -->
+        <div class="md:col-span-3 h-64 relative bg-[#0A0A0A] overflow-hidden border border-[#4B5563]/15 flex items-center justify-center">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#1c1b1b] to-[#050505]"></div>
+            <div class="absolute inset-0 flex flex-col justify-center px-12 z-10">
+                <div class="text-[#00FFFF] font-['Space_Grotesk'] uppercase tracking-[0.5em] text-[0.6875rem] mb-2">SYSTEM_CAPABILITIES</div>
+                <div class="text-white text-[1.5rem] font-black uppercase tracking-widest">SCALABLE &amp; RESILIENT</div>
+                <p class="text-[#b9cac9] text-[0.875rem] mt-4 max-w-2xl">Handles high-volume order ingestion without bottlenecks. Failures in processing don't affect order acceptance. Retries are safe and automatic.</p>
+            </div>
+        </div>
+
+        <!-- Prerequisites Card -->
+        <div class="bg-[#0A0A0A] p-8 col-span-1 border border-[#4B5563]/15 hover:border-[#00FFFF] transition-colors group">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-[#00FFFF] font-['Space_Grotesk'] uppercase tracking-[0.1em] text-[1.125rem]">PREREQUISITES</h3>
+                <span class="material-symbols-outlined text-[#4B5563] group-hover:text-[#00FFFF]">verified</span>
+            </div>
+            <ul class="space-y-6">
+                <li class="flex flex-col">
+                    <span class="text-[#4B5563] text-[0.6875rem] uppercase tracking-widest mb-1">LANGUAGE</span>
+                    <span class="text-on-surface text-[0.875rem]">Go 1.23+</span>
+                </li>
+                <li class="flex flex-col">
+                    <span class="text-[#4B5563] text-[0.6875rem] uppercase tracking-widest mb-1">INFRASTRUCTURE</span>
+                    <span class="text-on-surface text-[0.875rem]">Node.js & Serverless Framework</span>
+                </li>
+                <li class="flex flex-col">
+                    <span class="text-[#4B5563] text-[0.6875rem] uppercase tracking-widest mb-1">CLOUD</span>
+                    <span class="text-on-surface text-[0.875rem]">AWS Account</span>
+                </li>
+                <li class="flex flex-col">
+                    <span class="text-[#4B5563] text-[0.6875rem] uppercase tracking-widest mb-1">CLI TOOLS</span>
+                    <span class="text-on-surface text-[0.875rem]">Python 3.8+ (for Clingy)</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Clingy Framework Card -->
+        <div class="bg-[#0A0A0A] p-8 col-span-1 md:col-span-2 border border-[#4B5563]/15 relative overflow-hidden group hover:border-[#00FFFF] transition-colors">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-[#00FFFF] font-['Space_Grotesk'] uppercase tracking-[0.1em] text-[1.125rem]">CLINGY_FRAMEWORK</h3>
+                <span class="material-symbols-outlined text-[#4B5563] group-hover:text-[#00FFFF]">terminal</span>
+            </div>
+            <div class="space-y-4 text-[0.875rem] text-[#b9cac9] leading-relaxed">
+                <p>
+                    <strong>Clingy</strong> is a context-aware CLI framework purpose-built for this project to automate deployments and interactive testing of AWS Lambda functions.
+                </p>
+                <p>
+                    It eliminates the friction of manual payload composition and deployment cycles, allowing developers to build, zip, and deploy Go functions in a single orchestrated workflow, while testing complex scenarios locally or remotely.
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="md:col-span-3">
+            <div class="text-[#4B5563] font-['Space_Grotesk'] uppercase tracking-[0.2em] text-[0.6875rem] mb-8 flex items-center">
+                <span class="mr-4">QUICK_NAVIGATION</span>
+                <div class="h-[1px] flex-1 bg-[#4B5563]/20"></div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a class="group border border-[#4B5563]/15 p-6 hover:bg-[#2A2A2A] hover:border-[#00FFFF] transition-colors" href="pages/architecture.html">
+                    <div class="text-[#00FFFF] mb-4 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined">architecture</span></div>
+                    <div class="text-white font-bold text-[0.875rem] uppercase mb-1">ARCHITECTURE</div>
+                    <div class="text-[#4B5563] text-[0.75rem]">Understand the core topology of the system.</div>
+                </a>
+                <a class="group border border-[#4B5563]/15 p-6 hover:bg-[#2A2A2A] hover:border-[#00FFFF] transition-colors" href="https://github.com/ncasatti">
+                    <div class="text-[#00FFFF] mb-4 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined">person</span></div>
+                    <div class="text-white font-bold text-[0.875rem] uppercase mb-1">AUTHOR</div>
+                    <div class="text-[#4B5563] text-[0.75rem]">ncasatti</div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-24 pt-8 border-t border-[#4B5563]/15">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div class="text-[#4B5563] text-[0.6875rem] uppercase tracking-widest font-mono">END_OF_DOCUMENT</div>
+        </div>
+    </footer>
+</main>
+
+</body>
+</html>
