@@ -11,6 +11,8 @@ ______________________________________________________________________
 
 The system manages asynchronous order ingestion from mobile devices, ensuring high throughput, fault tolerance, and complete decoupling between producers and consumers through an elegant S3-based event bus pattern.
 
+See [Interactive Documentation](https://ncasatti.github.io/go-event-orders/).
+
 ### Why This Architecture Matters
 
 This project uses **separation of concerns** rather than a monolithic request-response cycle, the system splits the problem into two distinct phases:
